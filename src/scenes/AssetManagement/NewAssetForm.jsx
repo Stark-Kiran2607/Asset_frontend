@@ -15,7 +15,7 @@ const NewAssetForm = ({ show, handleClose }) => {
       currentStage: "Available",
       assigned: "",
     };
-    handleClose(newAsset); // Pass new asset back to parent
+    handleClose(newAsset); 
     setAssetName("");
     setCategory("");
     setBrand("");
