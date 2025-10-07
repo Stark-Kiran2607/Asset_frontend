@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table, Button,  Pagination } from "react-bootstrap";
 import { PlusSquare, Trash } from "react-bootstrap-icons";
 import AddNewBrand from "./AddNewBrand";
+import AddNewCategory from "./AddNewCategory";
 import EditBrand from "./EditBrand";
 const Brand = () => {
   // Dummy brands
@@ -14,8 +15,14 @@ const Brand = () => {
     { id: 6, brand: "SAMSUNG" , category: "Phone"},
     { id: 7, brand: "ASUS" , category: "Laptop"},
   ];
+  const dummyCategories =[
+    { id: 1, category: "Electronics" },
+    { id: 2, category: "Furniture" },
+  ];
 
   const [brands, setBrands] = useState(dummyBrands);
+  const [showCategoryModal, setShowCategoryModal] = useState(dummyCategories);
+  const [categories, setCategories] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingBrand, setEditingBrand] = useState(null);
@@ -40,19 +47,24 @@ const Brand = () => {
 
   return (
     <div className="container my-4">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h3>Brand List</h3>
-        <Button variant="dark" onClick={() => setShowAddModal(true)}>
-          <PlusSquare className="me-2" /> New Brand
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <h3>Asset List</h3>
+        <div className="d-flex gap-3">
+          <Button variant="dark" onClick={() => setShowAddModal(true)}>
+            <PlusSquare className="me-2" /> New Asset
+          </Button>
+         <Button variant="dark" onClick={() => setShowCategoryModal(true)}>
+            <PlusSquare className="me-2" /> New Category
         </Button>
+        </div>
       </div>
 
       <div className="table-responsive">
         <Table striped bordered hover>
           <thead className="table-dark">
             <tr>
-              <th>Brand ID</th>
-              <th>Brand Name</th>
+              <th>Asset ID</th>
+              <th>Asset Name</th>
               <th>Category</th>
               <th>Actions</th>
             </tr>
@@ -88,6 +100,21 @@ const Brand = () => {
         </Table>
       </div>
 
+      {/*<div className="col-lg-6">
+        <div className="card bg-dark text-white">
+          <div className="card header border-secondary">Categories</div>
+          <div className="card-body">
+            <ul className="list-group">
+              {dummyCategories.map((cat) => (
+                <li key={cat.id} className="list-group-item bg-dark text-white">
+                  {cat.category}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>*/}
+
       {/* Pagination */}
       <Pagination>
         <Pagination.Prev
@@ -117,6 +144,13 @@ const Brand = () => {
         handleClose={() => setShowAddModal(false)}
         postData={setBrands}
         tableRowData={brands}
+        categories={categories}
+      />
+      <AddNewCategory
+        show={showCategoryModal}
+        handleClose={() => setShowCategoryModal(false)}
+        postCategory={setCategories}
+        categories={categories}
       />
 
       {/* Edit Brand Modal */}

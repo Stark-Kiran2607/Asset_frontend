@@ -35,10 +35,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
   const menuItems = [
     { title: "Dashboard", to: "/", iconClass: "bi-house-door" },
-    { title: "Brand", to: "/brand", iconClass: "bi-tags" },
+    { title: "Assets", to: "/brand", iconClass: "bi-tags" },
     { title: "Classification", to: "/classification", iconClass: "bi-diagram-3" },
     { title: "Asset Management", to: "/assetmanagement", iconClass: "bi-hdd-stack" },
     { title: "Asset Request List", to: "/requestlist", iconClass: "bi-question-circle" },
+    { title: "User Management", to: "/usermanagement", iconClass: "bi-file-person"},
     { title: "User Dashboard", to: "/dashboard", iconClass: "bi-grid" },
     { title: "Asset Request", to: "/request", iconClass: "bi-journal-plus" },
   ];

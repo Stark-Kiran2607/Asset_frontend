@@ -161,25 +161,7 @@ const UserDashboard = () => {
       </div>
 
       {/* CHARTS / PLACEHOLDERS */}
-      <div className="row g-4 mt-4">
-        <div className="col-lg-6">
-          <div className="card bg-dark text-white h-100 p-4">
-            <h5>Asset Category Breakdown</h5>
-            <div className="d-flex justify-content-center align-items-center h-100 text-muted mt-3" style={{ height: "250px" }}>
-              Pie Chart Placeholder
-            </div>
-          </div>
-        </div>
-
-        <div className="col-lg-6">
-          <div className="card bg-dark text-white h-100 p-4">
-            <h5>Service Requests Trend</h5>
-            <div className="d-flex justify-content-center align-items-center h-100 text-muted mt-3" style={{ height: "250px" }}>
-              Line Chart Placeholder
-            </div>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };

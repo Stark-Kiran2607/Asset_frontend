@@ -11,6 +11,7 @@ import AdminDashboard from "./scenes/AdminDashboard/AdminDashboard";
 import Brand from "./scenes/Brand/Brand";
 import Classification from "./scenes/classification/classification";
 import AssetManagement from "./scenes/AssetManagement/AssetManagement";
+import UserManagement from "./scenes/usermanagement/UserManagement";
 import Dashboard from "./scenes/dashboard";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/brand" element={<Brand />} />
                 <Route path="/classification" element={<Classification />} />
                 <Route path="/assetmanagement" element={<AssetManagement />} />
+                <Route path="/usermanagement" element={<UserManagement />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
