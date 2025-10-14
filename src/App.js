@@ -3,69 +3,158 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-// Pages & Components
-import SignIn from "./pages/SignIn";
+
 import Sidebar from "./global/Sidebar";
+import EmployeeSidebar from "./global/EmployeeSidebar";
 import Topbar from "./global/Topbar";
+
+
+import SignIn from "./pages/SignIn";
+import SignOut from "./pages/SignOut";
 import AdminDashboard from "./scenes/AdminDashboard/AdminDashboard";
 import Brand from "./scenes/Brand/Brand";
 import Classification from "./scenes/classification/classification";
 import AssetManagement from "./scenes/AssetManagement/AssetManagement";
 import UserManagement from "./scenes/usermanagement/UserManagement";
-import Dashboard from "./scenes/dashboard";
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+import EmployeeDashboard from "./scenes/EmployeDashboard/EmployeeDashboard";
 
-  // Check login status on load
+
+import "./scenes/users";
+
+
+const PrivateRoute = ({ children, role }) => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (!isLoggedIn || !currentUser) return <Navigate to="/SignIn" />;
+  if (role && currentUser.role !== role) return <Navigate to="/unauthorized" />;
+
+  return children;
+};
+
+function App() {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
   useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn");
-    if (loggedIn) setIsLoggedIn(true);
+    const loginStatus = localStorage.getItem("isLoggedIn") === "true";
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (loginStatus && user) {
+      setIsLoggedIn(true);
+      setCurrentUser(user);
+    }
   }, []);
 
-  const handleLogin = (status) => {
-    localStorage.setItem("isLoggedIn", status ? "true" : "false");
-    setIsLoggedIn(status);
-  };
+  if (!isLoggedIn || !currentUser) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/SignIn" element={<SignIn onLogin={() => window.location.reload()} />} />
+          <Route path="*" element={<Navigate to="/SignIn" />} />
+        </Routes>
+      </Router>
+    );
+  }
+
 
   return (
     <Router>
-      {isLoggedIn ? (
-        <div>
-          {/* Topbar */}
-          <Topbar setIsSidebar={setIsSidebarCollapsed} />
+      <Topbar setIsSidebar={setIsSidebarCollapsed} />
+      <div className="d-flex">
+        {currentUser.role === "admin" ? (
+          <Sidebar isOpen={!isSidebarCollapsed} setIsOpen={setIsSidebarCollapsed} />
+        ) : (
+          <EmployeeSidebar isOpen={!isSidebarCollapsed} setIsOpen={setIsSidebarCollapsed} />
+        )}
 
-          {/* Layout */}
-          <div className="d-flex">
-            <Sidebar isOpen={!isSidebarCollapsed} setIsOpen={setIsSidebarCollapsed} />
+        <div
+          className="flex-grow-1"
+          style={{
+            marginLeft: isSidebarCollapsed ? "80px" : "250px",
+            transition: "margin-left 0.3s ease",
+            padding: "20px",
+          }}
+        >
+          <Routes>
+            {/* Admin Routes */}
+            <Route
+              path="/"
+              element={
+                <PrivateRoute role="admin">
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/brand"
+              element={
+                <PrivateRoute role="admin">
+                  <Brand />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/classification"
+              element={
+                <PrivateRoute role="admin">
+                  <Classification />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/assetmanagement"
+              element={
+                <PrivateRoute role="admin">
+                  <AssetManagement />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/usermanagement"
+              element={
+                <PrivateRoute role="admin">
+                  <UserManagement />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/EmployeeDashboard/:employeeId"
+              element={
+                <PrivateRoute role="admin">
+                  <EmployeeDashboard />
+                </PrivateRoute>
+              }
+          />
 
-            {/* Main Content */}
-            <div
-              className="flex-grow-1"
-              style={{
-                marginLeft: isSidebarCollapsed ? "80px" : "250px",
-                transition: "margin-left 0.3s ease",
-                padding: "20px",
-              }}
-            >
-              <Routes>
-                <Route path="/" element={<AdminDashboard />} />
-                <Route path="/brand" element={<Brand />} />
-                <Route path="/classification" element={<Classification />} />
-                <Route path="/assetmanagement" element={<AssetManagement />} />
-                <Route path="/usermanagement" element={<UserManagement />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="*" element={<Navigate to="/" />} />
-              </Routes>
-            </div>
-          </div>
+
+            {/* Employee Routes */}
+            <Route
+              path="/EmployeeDashboard"
+              element={
+                <PrivateRoute role="employee">
+                  <EmployeeDashboard />
+                </PrivateRoute>
+              }
+            />
+
+            {/* SignOut */}
+            <Route path="/signout" element={<SignOut />} />
+
+            {/* Default redirect */}
+            <Route
+              path="*"
+              element={
+                currentUser.role === "admin" ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Navigate to="/EmployeeDashboard" />
+                )
+              }
+            />
+          </Routes>
         </div>
-      ) : (
-        <Routes>
-          {/* Redirect all routes to SignIn if not logged in */}
-          <Route path="*" element={<SignIn onLogin={handleLogin} />} />
-        </Routes>
-      )}
+      </div>
     </Router>
   );
 }

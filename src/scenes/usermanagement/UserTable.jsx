@@ -1,11 +1,17 @@
 import React from "react";
 import { Table, Pagination, Button } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
 const UserTable = ({ users, currentPage, itemsPerPage, paginate, handleEdit, handleDelete }) => {
+  const navigate = useNavigate();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  const handleNameClick = (id) => {
+    navigate(`/EmployeeDashboard/${id}`);
+  };
 
   return (
     <>
@@ -13,7 +19,7 @@ const UserTable = ({ users, currentPage, itemsPerPage, paginate, handleEdit, han
         <Table striped bordered hover>
           <thead className="table-dark">
             <tr>
-              <th>EmployeeID</th>
+              <th>ID</th>
               <th>Employee Name</th>
               <th>Email Id</th>
               <th>Mobile No</th>
@@ -25,7 +31,10 @@ const UserTable = ({ users, currentPage, itemsPerPage, paginate, handleEdit, han
             {currentUsers.map((emp) => (
               <tr key={emp.id}>
                 <td>{emp.id}</td>
-                <td>{emp.Name}</td>
+                <td style={{cursor: "pointer", color: "#007bff", textDecoration:"underline"}}
+                    onClick={() => handleNameClick(emp.id)}>
+                    {emp.Name}
+                    </td>
                 <td>{emp.email}</td>
                 <td>{emp.Phone}</td>
                 <td>{emp.designation}</td>

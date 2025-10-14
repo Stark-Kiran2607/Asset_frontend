@@ -26,23 +26,20 @@ const SidebarItem = ({ title, to, iconClass, isCollapsed, closeOffcanvas }) => {
   );
 };
 
-export default function Sidebar({ isOpen, setIsOpen }) {
+export default function EmployeeSidebar({ isOpen, setIsOpen }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const toggleDesktopCollapse = () => setIsCollapsed(!isCollapsed);
   const toggleOffcanvas = () => setShowOffcanvas(!showOffcanvas);
 
+  // ✅ Employee-specific menu
   const menuItems = [
-    { title: "Dashboard", to: "/", iconClass: "bi-house-door" },
-    { title: "Assets", to: "/brand", iconClass: "bi-tags" },
-    { title: "Classification", to: "/classification", iconClass: "bi-diagram-3" },
-    { title: "Asset Management", to: "/assetmanagement", iconClass: "bi-hdd-stack" },
-    { title: "Asset Request List", to: "/requestlist", iconClass: "bi-question-circle" },
-    { title: "User Management", to: "/usermanagement", iconClass: "bi-file-person"},
-
-    { title: "Asset Request", to: "/request", iconClass: "bi-journal-plus" },
-    { title: "SignOut", to: "/signout", iconClass: "bi-door-closed-fill"}
+    { title: "Dashboard", to: "/EmployeeDashboard", iconClass: "bi-speedometer2" },
+    { title: "My Assets", to: "/EmployeeAssets", iconClass: "bi-laptop" },
+    { title: "Requests", to: "/EmployeeRequests", iconClass: "bi-envelope-paper" },
+    { title: "Support", to: "/EmployeeSupport", iconClass: "bi-headset" },
+    { title: "Sign Out", to: "/signout", iconClass: "bi-door-closed-fill" },
   ];
 
   return (
@@ -50,7 +47,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       {/* Desktop Sidebar */}
       <div className={`sidebarContainer ${isCollapsed ? "collapsed" : ""} d-none d-md-block`}>
         <div className="p-2 d-flex justify-content-between align-items-center">
-          <h5 className="text-light m-0">{!isCollapsed ? "Admin" : "A"}</h5>
+          <h5 className="text-light m-0">{!isCollapsed ? "Employee" : "E"}</h5>
           <Button variant="outline-light" size="sm" onClick={toggleDesktopCollapse}>
             {isCollapsed ? <i className="bi bi-arrow-bar-right"></i> : <i className="bi bi-arrow-bar-left"></i>}
           </Button>
@@ -59,8 +56,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         {!isCollapsed && (
           <div className="profile">
             <img src="https://via.placeholder.com/100" alt="profile" width="80" height="80" />
-            <h6>Ed Roh</h6>
-            <small className="text-muted">VP Fancy Admin</small>
+            <h6>John Doe</h6>
+            <small className="text-muted">Employee</small>
           </div>
         )}
 
@@ -96,7 +93,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 title={item.title}
                 to={item.to}
                 iconClass={item.iconClass}
-                isCollapsed={false} // always expanded in mobile offcanvas
+                isCollapsed={false}
                 closeOffcanvas={() => setShowOffcanvas(false)}
               />
             ))}
